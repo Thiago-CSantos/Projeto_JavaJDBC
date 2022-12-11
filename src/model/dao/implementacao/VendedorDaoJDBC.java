@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DbExeption;
@@ -90,6 +93,59 @@ public class VendedorDaoJDBC implements VendedorDao{
 	public List<Vendedor> findAll() {
 		
 		return null;
+	}
+
+	@Override
+	public List<Vendedor> findByDepartamento(Departamento departamento) {
+		PreparedStatement st = null;
+		
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "WHERE DepartmentId = ? "
+					+ "ORDER BY Name");
+		
+			st.setInt(1, departamento.getId());
+			
+			rs = st.executeQuery();
+			
+			List<Vendedor> listaV = new ArrayList<>();
+			Map<Integer, Departamento> map = new HashMap<>();
+			
+			
+			while(rs.next()) {
+				
+				Departamento dep = map.get(rs.getInt("DepartmentId"));
+				
+				if(dep == null) {
+				
+					dep = new Departamento();
+					dep.setId(rs.getInt("DepartmentId"));
+					dep.setNome(rs.getString("DepName"));
+					
+					map.put(rs.getInt("DepartmentId"), dep);
+				 
+				}
+				Vendedor venObj = new Vendedor();
+				
+				venObj.setId(rs.getInt("Id"));
+				venObj.setNome(rs.getString("Name"));
+				venObj.setEmail(rs.getString("Email"));
+				venObj.setSalarioBase(rs.getDouble("BaseSalary"));
+				venObj.setDataNascimento(rs.getDate("BirthDate"));
+				venObj.setDepartamentos(dep);
+			
+			 listaV.add(venObj);
+			}
+			return listaV;
+		}
+		
+		catch(SQLException e) {
+			throw new DbExeption(e.getMessage());
+		}
 	}
 
 	
