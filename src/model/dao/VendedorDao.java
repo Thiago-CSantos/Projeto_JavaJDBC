@@ -7,7 +7,7 @@ import model.entidades.Vendedor;
 
 public interface VendedorDao {
 
-void inserir(Vendedor objeto);
+	void inserir(Vendedor objeto);
 	
 	void atualizar(Vendedor objeto);
 	

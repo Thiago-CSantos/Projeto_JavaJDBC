@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.cj.util.DnsSrv;
+
 import db.DB;
 import db.DbExeption;
 import model.dao.VendedorDao;
@@ -89,12 +91,53 @@ public class VendedorDaoJDBC implements VendedorDao{
 		
 	}
 
+	
+	
 	@Override
 	public List<Vendedor> findAll() {
 		
-		return null;
+		PreparedStatement st = null;
+		ResultSet  rs = null;
+		
+		try {
+			st = conn.prepareStatement("SELECT seller.*,department.Name as NomeDepartamentos "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "ORDER BY Name;");
+			
+			rs = st.executeQuery();
+			
+			List<Vendedor> listaV = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+				Departamento dep = new Departamento();
+				
+				dep.setId(rs.getInt("DepartmentId"));
+				dep.setNome(rs.getString("NomeDepartamentos"));
+				
+				Vendedor vendedorObj = new Vendedor();
+				
+				vendedorObj.setDepartamentos(dep);
+				
+				vendedorObj.setId(rs.getInt("Id"));
+				vendedorObj.setNome(rs.getString("Name"));
+				vendedorObj.setEmail(rs.getString("Email"));
+				vendedorObj.setDataNascimento(rs.getDate("BirthDate"));
+				vendedorObj.setSalarioBase(rs.getDouble("BaseSalary"));
+				
+				listaV.add(vendedorObj);
+			}
+			return listaV;
+		}
+		catch(SQLException e) {
+			throw new DbExeption(e.getMessage());
+		}
 	}
 
+	
+	
+	
 	@Override
 	public List<Vendedor> findByDepartamento(Departamento departamento) {
 		PreparedStatement st = null;
