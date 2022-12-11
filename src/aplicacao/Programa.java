@@ -41,6 +41,12 @@ public class Programa {
 			System.out.println(OBJ);
 		}
 		
+		System.out.println("---------INSERT-------\n"+"INSERIR DADOS:");
+		System.out.print("Linhas alteradas: ");
+		
+		Departamento depar = new Departamento(3, null);
+		Vendedor vend = new Vendedor(null, "Denise", "denise@gmail.com", new Date(), 2000.99, depar);
+		vd.inserir(vend);
 	}
 
 }

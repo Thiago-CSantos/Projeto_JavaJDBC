@@ -1,9 +1,12 @@
 package model.dao.implementacao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +23,7 @@ import model.entidades.Vendedor;
 public class VendedorDaoJDBC implements VendedorDao{
 	
 	private Connection conn;
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
 	
 	public VendedorDaoJDBC(Connection conectar) {
 		this.conn = conectar;
@@ -27,7 +31,29 @@ public class VendedorDaoJDBC implements VendedorDao{
 
 	@Override
 	public void inserir(Vendedor objeto) {
+		PreparedStatement st = null;
 		
+		ResultSet rs = null;
+		
+		try {
+			st = conn.prepareStatement("INSERT INTO seller "
+					+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+					+ "VALUES"
+					+ "(?, ?, ?, ?, ?)");
+			
+			st.setString(1, objeto.getNome());
+			st.setString(2, objeto.getEmail());
+			st.setDate(3, new Date(objeto.getDataNascimento().getTime()));
+			st.setDouble(4, objeto.getSalarioBase());
+			st.setInt(5, objeto.getDepartamentos().getId());
+			
+			int linhasAfetadas = st.executeUpdate();
+			
+			System.out.println(linhasAfetadas);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
