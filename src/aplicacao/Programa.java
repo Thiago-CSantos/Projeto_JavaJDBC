@@ -2,6 +2,7 @@ package aplicacao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import model.dao.FabricaDao;
 import model.dao.VendedorDao;
@@ -13,7 +14,7 @@ public class Programa {
 
 	public static void main(String[] args) {
 		
-		
+		Scanner sc = new Scanner(System.in); 
 		
 		VendedorDao vd = FabricaDao.criarVendedorDao(); //Para se conectar com o banco 
 		
@@ -53,6 +54,12 @@ public class Programa {
 		Departamento dep = new Departamento(4, null);
 		Vendedor vende = new Vendedor(12, "Alex", "alex@gmail.com", new Date(), 5000.00, dep);
 		vd.atualizar(vende);
+		
+		System.out.println("---------DELET-------\n"+"DELETAR DADOS:");
+		System.out.print("Digite um ID: ");
+		int n = sc.nextInt();
+		vd.deletarById(n);
+		
 	}
 
 }
