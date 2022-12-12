@@ -47,6 +47,12 @@ public class Programa {
 		Departamento depar = new Departamento(3, null);
 		Vendedor vend = new Vendedor(null, "Denise", "denise@gmail.com", new Date(), 2000.99, depar);
 		vd.inserir(vend);
+		
+		
+		System.out.println("---------Update-------\n"+"ATUALIZAR DADOS:");
+		Departamento dep = new Departamento(4, null);
+		Vendedor vende = new Vendedor(12, "Alex", "alex@gmail.com", new Date(), 5000.00, dep);
+		vd.atualizar(vende);
 	}
 
 }
