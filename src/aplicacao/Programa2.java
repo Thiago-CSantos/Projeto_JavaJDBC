@@ -1,5 +1,6 @@
 package aplicacao;
 
+import java.util.List;
 import java.util.Scanner;
 
 import model.dao.DepartamentoDao;
@@ -31,6 +32,14 @@ public class Programa2 {
 		System.out.println("---------finById-------\n"+"ACHAR POR ID:");
 		Departamento s = departamento.findById(2);
 		System.out.println(s);
+		
+		System.out.println("---------finAll-------\n"+"ACHAR TOTAL:");
+		List<Departamento> listaFinAll = departamento.findAll();
+		
+		for(Departamento obj : listaFinAll) {
+			System.out.println(obj);
+		}
+		
 	}
 
 }
